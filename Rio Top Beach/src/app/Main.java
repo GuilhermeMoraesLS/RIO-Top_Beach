@@ -1,7 +1,7 @@
 package app;
 
-import model.*;
 import java.util.Scanner;
+import model.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -43,8 +43,11 @@ public class Main {
                     }
                     System.out.print("Nome do avaliador: ");
                     String nomeAvaliador = scanner.nextLine();
-                    // Simples busca por nome, em produção use um catálogo de avaliadores
-                    Avaliador avaliador = new Avaliador(1, nomeAvaliador, "email@exemplo.com", "Comum");
+                    Avaliador avaliador = AvaliadorCatalogo.buscarPorNome(nomeAvaliador);
+                    if (avaliador == null) {
+                        System.out.println("Avaliador não encontrado. Cadastre o avaliador primeiro.");
+                        break;
+                    }
                     System.out.print("Nota (0-10): ");
                     int nota = scanner.nextInt();
                     scanner.nextLine();
@@ -72,7 +75,8 @@ public class Main {
                     System.out.print("Tipo de perfil: ");
                     String tipoPerfil = scanner.nextLine();
                     Avaliador novoAvaliador = new Avaliador(1, nomeNovoAvaliador, email, tipoPerfil);
-                    System.out.println("Avaliador cadastrado (não persistido em catálogo)!");
+                    AvaliadorCatalogo.adicionarAvaliador(novoAvaliador);
+                    System.out.println("Avaliador cadastrado com sucesso!");
                     break;
                 case 0:
                     System.out.println("Saindo...");
