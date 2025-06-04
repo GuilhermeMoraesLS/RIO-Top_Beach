@@ -29,4 +29,8 @@ public class PraiaCatalogo {
         }
         return null;
     }
+
+    public static List<Praia> getPraias() {
+        return praias;
+    }
 }

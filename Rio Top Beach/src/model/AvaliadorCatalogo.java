@@ -38,4 +38,8 @@ public class AvaliadorCatalogo {
             }
         }
     }
+
+    public static List<Avaliador> getAvaliadores() {
+        return avaliadores;
+    }
 }

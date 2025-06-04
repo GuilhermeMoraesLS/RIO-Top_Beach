@@ -34,20 +34,44 @@ public class Main {
                     PraiaCatalogo.listarTodas();
                     break;
                 case 3:
-                    System.out.print("Nome da praia para avaliar: ");
-                    String nomeAvaliar = scanner.nextLine();
-                    Praia praiaAvaliar = PraiaCatalogo.buscarPorNome(nomeAvaliar);
-                    if (praiaAvaliar == null) {
-                        System.out.println("Praia não encontrada.");
+                    // Listar praias cadastradas
+                    java.util.List<Praia> praias = PraiaCatalogo.getPraias();
+                    if (praias == null || praias.isEmpty()) {
+                        System.out.println("Nenhuma praia cadastrada. Cadastre uma praia antes de avaliar.");
                         break;
                     }
-                    System.out.print("Nome do avaliador: ");
-                    String nomeAvaliador = scanner.nextLine();
-                    Avaliador avaliador = AvaliadorCatalogo.buscarPorNome(nomeAvaliador);
-                    if (avaliador == null) {
-                        System.out.println("Avaliador não encontrado. Cadastre o avaliador primeiro.");
+                    System.out.println("Praias cadastradas:");
+                    for (int i = 0; i < praias.size(); i++) {
+                        System.out.println((i + 1) + ". " + praias.get(i).getNome() + " (" + praias.get(i).getLocalizacao() + ")");
+                    }
+                    System.out.print("Escolha o número da praia para avaliar: ");
+                    int indicePraia = scanner.nextInt() - 1;
+                    scanner.nextLine();
+                    if (indicePraia < 0 || indicePraia >= praias.size()) {
+                        System.out.println("Número de praia inválido.");
                         break;
                     }
+                    Praia praiaAvaliar = praias.get(indicePraia);
+
+                    // Listar avaliadores cadastrados
+                    java.util.List<Avaliador> avaliadores = AvaliadorCatalogo.getAvaliadores();
+                    if (avaliadores == null || avaliadores.isEmpty()) {
+                        System.out.println("Nenhum avaliador cadastrado. Cadastre um avaliador antes de avaliar.");
+                        break;
+                    }
+                    System.out.println("Avaliadores cadastrados:");
+                    for (int i = 0; i < avaliadores.size(); i++) {
+                        System.out.println((i + 1) + ". " + avaliadores.get(i).getNome() + " (" + avaliadores.get(i).getEmail() + ")");
+                    }
+                    System.out.print("Escolha o número do avaliador: ");
+                    int indiceAvaliador = scanner.nextInt() - 1;
+                    scanner.nextLine();
+                    if (indiceAvaliador < 0 || indiceAvaliador >= avaliadores.size()) {
+                        System.out.println("Número de avaliador inválido.");
+                        break;
+                    }
+                    Avaliador avaliador = avaliadores.get(indiceAvaliador);
+
                     System.out.print("Nota (0-10): ");
                     int nota = scanner.nextInt();
                     scanner.nextLine();
