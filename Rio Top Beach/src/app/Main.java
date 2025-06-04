@@ -64,7 +64,9 @@ public class Main {
                         System.out.println("Praia não encontrada.");
                     } else {
                         praiaDetalhe.exibirInformacoes();
+                        System.out.println("------Comentarios------");
                         praiaDetalhe.listarComentarios();
+                        System.out.println("-----------------------");
                     }
                     break;
                 case 5:

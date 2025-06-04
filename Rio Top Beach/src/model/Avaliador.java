@@ -41,10 +41,11 @@ public class Avaliador extends Usuario {
     }
 
     public void avaliarPraia(Praia praia, int nota, String comentario) {
-        int avaliacaoId = praia.getAvaliacoes().size() + 1;
+        int avaliacaoId = (int) (System.currentTimeMillis() % Integer.MAX_VALUE); // Gera um ID único simples
         Avaliacao avaliacao = new Avaliacao(avaliacaoId, nota, comentario, LocalDate.now(), this);
         praia.adicionarAvaliacao(avaliacao);
         this.adicionarAvaliacao(avaliacao);
+        System.out.println("Avaliação adicionada à praia: " + praia.getNome() + " | Total de avaliações: " + praia.getAvaliacoes().size());
     }
 
     @Override
