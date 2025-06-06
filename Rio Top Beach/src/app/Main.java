@@ -1,8 +1,10 @@
 package app;
 
 import dao.AvaliadorDAO;
+import dao.AvaliacaoDAO;
 import dao.PraiaDAO;
 import model.Avaliador;
+import model.Avaliacao;
 import model.Praia;
 
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final AvaliadorDAO avaliadorDAO = new AvaliadorDAO();
     private static final PraiaDAO praiaDAO = new PraiaDAO();
+    private static final AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
     private static Avaliador usuarioLogado = null;
 
     public static void main(String[] args) {
@@ -174,31 +177,27 @@ public class Main {
         System.out.print("Comentário: ");
         String comentario = scanner.nextLine();
 
-        // Usa o usuário logado para fazer a avaliação
-        usuarioLogado.avaliarPraia(praiaAvaliar, nota, comentario);
-        // Aqui você precisaria de um AvaliacaoDAO para persistir a avaliação no banco
-        System.out.println("Avaliação registrada com sucesso!");
+        Avaliacao novaAvaliacao = usuarioLogado.avaliarPraia(praiaAvaliar, nota, comentario);
+        try {
+            avaliacaoDAO.inserir(novaAvaliacao, praiaAvaliar.getId());
+            System.out.println("Avaliação registrada com sucesso!");
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar avaliação: " + e.getMessage());
+        }
     }
 
     private static void verDetalhesPraia() {
         System.out.print("Nome da praia para ver detalhes: ");
         String nomeDetalhe = scanner.nextLine();
-        // Esta busca ainda está em memória, o ideal seria um praiaDAO.buscarPorNome()
-        List<Praia> praias = praiaDAO.listar();
-        Praia praiaDetalhe = null;
-        for(Praia p : praias) {
-            if(p.getNome().equalsIgnoreCase(nomeDetalhe)) {
-                praiaDetalhe = p;
-                break;
-            }
-        }
+        
+        Praia praiaDetalhe = praiaDAO.buscarPorNome(nomeDetalhe);
 
         if (praiaDetalhe == null) {
             System.out.println("Praia não encontrada.");
         } else {
             praiaDetalhe.exibirInformacoes();
             System.out.println("------Comentários------");
-            praiaDetalhe.listarComentarios(); // Comentários ainda não são persistidos
+            praiaDetalhe.listarComentarios();
             System.out.println("-----------------------");
         }
     }

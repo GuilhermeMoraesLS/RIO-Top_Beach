@@ -50,4 +50,29 @@ public class AvaliadorDAO {
         }
         return null;
     }
+
+    /**
+     * Busca um avaliador pelo ID.
+     * Usado para vincular o avaliador às suas avaliações.
+     */
+    public Avaliador buscarPorId(int id) {
+        String sql = "SELECT * FROM avaliador WHERE id = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Avaliador(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("tipo_perfil")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar avaliador por id: " + e.getMessage());
+        }
+        return null;
+    }
 }
