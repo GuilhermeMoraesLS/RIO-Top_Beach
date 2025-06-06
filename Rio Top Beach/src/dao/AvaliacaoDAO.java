@@ -37,4 +37,21 @@ public class AvaliacaoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, praiaId);
             ResultSet rs = stmt.executeQuery();
-            Avaliador
+            dao.AvaliadorDAO avaliadorDAO = new dao.AvaliadorDAO();
+            while (rs.next()) {
+                Avaliador avaliador = avaliadorDAO.buscarPorId(rs.getInt("avaliador_id"));
+                Avaliacao avaliacao = new Avaliacao(
+                        rs.getInt("id"),
+                        rs.getInt("nota"),
+                        rs.getString("comentario"),
+                        rs.getDate("data").toLocalDate(),
+                        avaliador
+                );
+                avaliacoes.add(avaliacao);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar avaliações por praia: " + e.getMessage());
+        }
+        return avaliacoes;
+    }
+}
