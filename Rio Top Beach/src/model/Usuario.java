@@ -4,11 +4,13 @@ public abstract class Usuario {
     protected int id;
     protected String nome;
     protected String email;
+    protected String senha;
 
-    public Usuario(int id, String nome, String email) {
+    public Usuario(int id, String nome, String email, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
+        this.senha = senha;
     }
 
     public int getId() {
@@ -33,6 +35,14 @@ public abstract class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public abstract void exibirPerfil();

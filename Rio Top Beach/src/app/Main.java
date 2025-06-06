@@ -23,10 +23,10 @@ public class Main {
                 case 1:
                     System.out.print("Nome da praia: ");
                     String nomePraia = scanner.nextLine();
-                    System.out.print("Localização: ");
+                    System.out.print("Bairro: ");
                     String localizacao = scanner.nextLine();
                     int idPraia = PraiaCatalogo.buscarPorNome(nomePraia) == null ? PraiaCatalogo.class.hashCode() + nomePraia.hashCode() : 0;
-                    Praia novaPraia = new Praia(idPraia, nomePraia, localizacao);
+                    Praia novaPraia = new Praia(idPraia, nomePraia, bairro);
                     PraiaCatalogo.adicionarPraia(novaPraia);
                     System.out.println("Praia cadastrada com sucesso!");
                     break;

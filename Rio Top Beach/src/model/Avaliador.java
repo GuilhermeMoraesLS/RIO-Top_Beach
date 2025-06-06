@@ -8,8 +8,8 @@ public class Avaliador extends Usuario {
     private String tipoPerfil;
     private List<Avaliacao> avaliacoes;
 
-    public Avaliador(int id, String nome, String email, String tipoPerfil) {
-        super(id, nome, email);
+    public Avaliador(int id, String nome, String email, String senha, String tipoPerfil) {
+        super(id, nome, email, senha);
         this.tipoPerfil = tipoPerfil;
         this.avaliacoes = new ArrayList<>();
     }

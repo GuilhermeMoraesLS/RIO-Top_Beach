@@ -6,13 +6,13 @@ import java.util.List;
 public class Praia implements Avaliavel {
     private int id;
     private String nome;
-    private String localizacao;
+    private String bairro;
     private List<Avaliacao> avaliacoes;
 
-    public Praia(int id, String nome, String localizacao) {
+    public Praia(int id, String nome, String bairro) {
         this.id = id;
         this.nome = nome;
-        this.localizacao = localizacao;
+        this.bairro = bairro;
         this.avaliacoes = new ArrayList<>();
     }
 
@@ -32,12 +32,12 @@ public class Praia implements Avaliavel {
         this.nome = nome;
     }
 
-    public String getLocalizacao() {
-        return localizacao;
+    public String getBairro() {
+        return bairro;
     }
 
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
     public List<Avaliacao> getAvaliacoes() {
@@ -83,7 +83,7 @@ public class Praia implements Avaliavel {
 
     public void exibirInformacoes() {
         System.out.println("Praia: " + nome);
-        System.out.println("Localização: " + localizacao);
+        System.out.println("Bairro: " + bairro);
         System.out.println("Média de Nota: " + calcularNotaMedia());
         System.out.println("Quantidade de Avaliações: " + avaliacoes.size());
     }
