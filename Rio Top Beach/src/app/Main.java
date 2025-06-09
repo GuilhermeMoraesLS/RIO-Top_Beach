@@ -6,6 +6,7 @@ import dao.PraiaDAO;
 import model.Avaliador;
 import model.Avaliacao;
 import model.Praia;
+import model.PraiaRankingDTO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,38 +21,42 @@ public class Main {
 
     public static void main(String[] args) {
         while (true) {
-            System.out.println("\n=== BEM-VINDO AO RIO TOP BEACH ===");
             if (usuarioLogado == null) {
-                System.out.println("1. Login");
-                System.out.println("2. Cadastrar novo avaliador");
-                System.out.println("0. Sair");
+                exibirMenuDeslogado();
             } else {
                 exibirMenuLogado();
-            }
-
-            System.out.print("Escolha uma opção: ");
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
-
-            if (usuarioLogado == null) {
-                switch (opcao) {
-                    case 1:
-                        realizarLogin();
-                        break;
-                    case 2:
-                        realizarCadastro();
-                        break;
-                    case 0:
-                        System.out.println("Saindo do sistema...");
-                        return;
-                    default:
-                        System.out.println("Opção inválida.");
-                }
             }
         }
     }
 
+    private static void exibirMenuDeslogado() {
+        System.out.println("\n🌊 === BEM-VINDO AO RIO TOP BEACH === 🌊");
+        System.out.println("==========================================");
+        System.out.println("1. Login");
+        System.out.println("2. Cadastrar novo avaliador");
+        System.out.println("0. Sair");
+        System.out.println("==========================================");
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opcao) {
+            case 1:
+                realizarLogin();
+                break;
+            case 2:
+                realizarCadastro();
+                break;
+            case 0:
+                System.out.println("\nSaindo do sistema... Até a próxima!");
+                System.exit(0);
+            default:
+                System.out.println("Opção inválida. Tente novamente.");
+        }
+    }
+
     private static void realizarLogin() {
+        System.out.println("\n--- LOGIN DE AVALIADOR ---");
         System.out.print("Email: ");
         String email = scanner.nextLine();
         System.out.print("Senha: ");
@@ -61,20 +66,21 @@ public class Main {
 
         if (avaliador != null && avaliador.getSenha().equals(senha)) {
             usuarioLogado = avaliador;
-            System.out.println("Login realizado com sucesso! Bem-vindo(a), " + usuarioLogado.getNome() + "!");
+            System.out.println("\n✅ Login realizado com sucesso! Bem-vindo(a), " + usuarioLogado.getNome() + "!");
         } else {
-            System.out.println("Email ou senha inválidos.");
+            System.out.println("\n❌ Email ou senha inválidos.");
         }
     }
 
     private static void realizarCadastro() {
+        System.out.println("\n--- CADASTRO DE NOVO AVALIADOR ---");
         System.out.print("Nome completo: ");
         String nome = scanner.nextLine();
         System.out.print("Email: ");
         String email = scanner.nextLine();
 
         if (avaliadorDAO.buscarPorEmail(email) != null) {
-            System.out.println("Erro: Este email já está cadastrado.");
+            System.out.println("\n❌ Erro: Este email já está cadastrado.");
             return;
         }
 
@@ -87,22 +93,26 @@ public class Main {
 
         try {
             avaliadorDAO.cadastrarAvaliador(novoAvaliador);
-            System.out.println("Cadastro realizado com sucesso! Você já pode fazer o login.");
+            System.out.println("\n✅ Cadastro realizado com sucesso! Você já pode fazer o login.");
         } catch (SQLException e) {
-            System.out.println("Erro ao realizar cadastro: " + e.getMessage());
+            System.out.println("\n❌ Erro ao realizar cadastro: " + e.getMessage());
         }
     }
 
     private static void exibirMenuLogado() {
         System.out.println("\n--- MENU PRINCIPAL ---");
+        System.out.println("Olá, " + usuarioLogado.getNome() + "!");
+        System.out.println("---------------------------------");
         System.out.println("1. Cadastrar nova praia");
         System.out.println("2. Listar todas as praias");
         System.out.println("3. Avaliar uma praia");
-        System.out.println("4. Ver detalhes e nota média de uma praia");
+        System.out.println("4. Ver detalhes de uma praia");
+        System.out.println("5. Ver ranking das praias");
         System.out.println("9. Logout");
+        System.out.println("---------------------------------");
         System.out.print("Escolha uma opção: ");
         int opcao = scanner.nextInt();
-        scanner.nextLine(); // Limpa o buffer
+        scanner.nextLine();
 
         switch (opcao) {
             case 1:
@@ -117,33 +127,36 @@ public class Main {
             case 4:
                 verDetalhesPraia();
                 break;
+            case 5:
+                exibirRankingPraias();
+                break;
             case 9:
                 usuarioLogado = null;
-                System.out.println("Logout realizado com sucesso.");
+                System.out.println("\nLogout realizado com sucesso.");
                 break;
             default:
-                System.out.println("Opção inválida.");
+                System.out.println("\nOpção inválida.");
         }
     }
 
     private static void cadastrarPraia() {
+        System.out.println("\n--- CADASTRAR NOVA PRAIA ---");
         System.out.print("Nome da praia: ");
         String nomePraia = scanner.nextLine();
-        System.out.print("Bairro: ");
+        System.out.print("Bairro/Localização: ");
         String bairro = scanner.nextLine();
-        // A geração de ID deve ser preferencialmente AUTO_INCREMENT no banco
-        int idPraia = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
-        Praia novaPraia = new Praia(idPraia, nomePraia, bairro);
+
+        Praia novaPraia = new Praia(0, nomePraia, bairro);
         praiaDAO.inserir(novaPraia);
-        System.out.println("Praia cadastrada com sucesso!");
+        System.out.println("\n✅ Praia cadastrada com sucesso!");
     }
 
     private static void listarPraias() {
+        System.out.println("\n--- LISTA DE PRAIAS CADASTRADAS ---");
         List<Praia> praias = praiaDAO.listar();
         if (praias.isEmpty()) {
             System.out.println("Nenhuma praia cadastrada.");
         } else {
-            System.out.println("\n--- LISTA DE PRAIAS ---");
             for (Praia praia : praias) {
                 praia.exibirInformacoes();
                 System.out.println("-------------------");
@@ -152,6 +165,7 @@ public class Main {
     }
 
     private static void avaliarPraia() {
+        System.out.println("\n--- AVALIAR UMA PRAIA ---");
         List<Praia> praias = praiaDAO.listar();
         if (praias.isEmpty()) {
             System.out.println("Nenhuma praia cadastrada para avaliar.");
@@ -166,7 +180,7 @@ public class Main {
         scanner.nextLine();
 
         if (indicePraia < 0 || indicePraia >= praias.size()) {
-            System.out.println("Número de praia inválido.");
+            System.out.println("\n❌ Número de praia inválido.");
             return;
         }
         Praia praiaAvaliar = praias.get(indicePraia);
@@ -180,25 +194,46 @@ public class Main {
         Avaliacao novaAvaliacao = usuarioLogado.avaliarPraia(praiaAvaliar, nota, comentario);
         try {
             avaliacaoDAO.inserir(novaAvaliacao, praiaAvaliar.getId());
-            System.out.println("Avaliação registrada com sucesso!");
+            System.out.println("\n✅ Avaliação registrada com sucesso!");
         } catch (SQLException e) {
-            System.out.println("Erro ao salvar avaliação: " + e.getMessage());
+            System.out.println("\n❌ Erro ao salvar avaliação: " + e.getMessage());
         }
     }
 
     private static void verDetalhesPraia() {
+        System.out.println("\n--- DETALHES DA PRAIA ---");
         System.out.print("Nome da praia para ver detalhes: ");
         String nomeDetalhe = scanner.nextLine();
-        
+
         Praia praiaDetalhe = praiaDAO.buscarPorNome(nomeDetalhe);
 
         if (praiaDetalhe == null) {
-            System.out.println("Praia não encontrada.");
+            System.out.println("\n❌ Praia não encontrada.");
         } else {
+            System.out.println("\n-----------------------");
             praiaDetalhe.exibirInformacoes();
-            System.out.println("------Comentários------");
+            System.out.println("------ Comentários ------");
             praiaDetalhe.listarComentarios();
             System.out.println("-----------------------");
         }
+    }
+
+    private static void exibirRankingPraias() {
+        System.out.println("\n🏆 --- RANKING RIO TOP BEACH --- 🏆");
+        System.out.println("====================================");
+        List<PraiaRankingDTO> ranking = praiaDAO.getRankingPraias();
+
+        if (ranking.isEmpty()) {
+            System.out.println("Ainda não há praias avaliadas para formar um ranking.");
+        } else {
+            int posicao = 1;
+            for (PraiaRankingDTO item : ranking) {
+                System.out.printf("%dº. %-20s | Nota Média: %.1f%n",
+                        posicao++,
+                        item.getNome(),
+                        item.getNotaMedia());
+            }
+        }
+        System.out.println("====================================");
     }
 }
