@@ -81,6 +81,13 @@ public class Avaliacao {
                 '}';
     }
 
+
+    /**
+     * Sobrescreve o método equals para definir um critério de igualdade de negócio.
+     * Dois objetos da classe Avaliacao são considerados iguais se, e somente se,
+     * possuírem o mesmo valor no atributo 'id'.
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

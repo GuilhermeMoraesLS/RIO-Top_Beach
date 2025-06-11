@@ -6,13 +6,13 @@ import java.util.List;
 public class Praia implements Avaliavel {
     private int id;
     private String nome;
-    private String bairro;
+    private String localizacao;
     private List<Avaliacao> avaliacoes;
 
-    public Praia(int id, String nome, String bairro) {
+    public Praia(int id, String nome, String localizacao) {
         this.id = id;
         this.nome = nome;
-        this.bairro = bairro;
+        this.localizacao = localizacao;
         this.avaliacoes = new ArrayList<>();
     }
 
@@ -32,12 +32,12 @@ public class Praia implements Avaliavel {
         this.nome = nome;
     }
 
-    public String getBairro() {
-        return bairro;
+    public String getLocalizacao() {
+        return localizacao;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
     }
 
     public List<Avaliacao> getAvaliacoes() {
@@ -69,10 +69,11 @@ public class Praia implements Avaliavel {
 
     public void listarComentarios() {
         if (avaliacoes.isEmpty()) {
-            System.out.println("Nenhum comentário disponível.");
+            System.out.println("  Nenhum comentário disponível.");
         } else {
             for (Avaliacao a : avaliacoes) {
-                System.out.println(a.getComentario());
+                System.out.printf("  > \"%s\" (Nota: %d, por: %s)%n",
+                        a.getComentario(), a.getNota(), a.getAvaliador().getNome());
             }
         }
     }
@@ -83,8 +84,8 @@ public class Praia implements Avaliavel {
 
     public void exibirInformacoes() {
         System.out.println("Praia: " + nome);
-        System.out.println("Bairro: " + bairro);
-        System.out.println("Média de Nota: " + calcularNotaMedia());
+        System.out.println("Localização: " + localizacao);
+        System.out.printf("Média de Nota: %.1f%n", calcularNotaMedia());
         System.out.println("Quantidade de Avaliações: " + avaliacoes.size());
     }
 }
